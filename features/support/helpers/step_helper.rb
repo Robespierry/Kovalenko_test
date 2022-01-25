@@ -1,17 +1,10 @@
 # frozen_string_literal: true
 
 def find_user_id(users_information:, user_login:)
-  users_id = []
-  users_information.each do |user|
-    next unless user['login'] == user_login
 
-    users_id << user['id']
-  end
-  users_id.uniq!
+  user_info = users_information.select { |user| user['login'] == user_login }
 
-  if users_id.size != 1
-    raise "Логин пользователя неуникален! Найдено пользователей с аналогичным логином: #{users_id.size}, id: #{users_id.inspect}"
-  end
+  raise "Логин #{user_login} неуникален или не найден в списке" if user_info.size != 1
 
-  users_id.first
+  user_info[0]['id']
 end
